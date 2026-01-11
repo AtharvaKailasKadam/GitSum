@@ -1,2 +1,2 @@
-# --GitSum--
+# 🧮✨-GitSum-🔍📦
 Github Summarizer
