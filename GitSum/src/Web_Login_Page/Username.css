@@ -34,8 +34,8 @@ body {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 25px;
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     max-width: 650px;
     width: 90%;
@@ -136,6 +136,60 @@ body {
     border-color: rgba(255, 156, 66, 0.8);
     box-shadow: 0 0 20px rgba(255, 156, 66, 0.4);
     color: #ffffff;
+}
+
+
+.Username-Button-Container {
+    text-align: center;
+    margin-top: 30px;
+    animation: slideUp 0.8s ease-out 0.8s both;
+}
+
+.Username-Button {
+    background: linear-gradient(135deg, #ff9c42, #ff6200);
+    color: #ffffff;
+    border: none;
+    padding: 16px 50px;
+    font-size: 1.1em;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 8px 20px rgba(255, 156, 66, 0.4);
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.Username-Button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.Username-Button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.Username-Button:hover {
+    background: linear-gradient(135deg, #ffb359, #ff9649);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(255, 156, 66, 0.6);
+}
+
+.Username-Button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(255, 156, 66, 0.4);
 }
 
 @keyframes fadeIn {

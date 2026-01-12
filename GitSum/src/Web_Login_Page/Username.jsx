@@ -13,6 +13,9 @@ export const EnterUserName = () => {
                 </div>
                 <h1 className="Username-Heading">Enter Username...!</h1>
                 <input type="text" className="Username-Input" placeholder="Username"/>
+                <div className="Username-Button-Container">
+                    <button className="Username-Button">Summarize</button>
+                </div>
             </div>
         </div>
     );

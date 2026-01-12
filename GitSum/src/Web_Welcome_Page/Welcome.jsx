@@ -1,9 +1,11 @@
 import React from "react";
 import "./Welcome.css";
+import { useNavigate } from "react-router-dom";
 import FloatingMarks from "./FloatingMarks";
 import logo from "../assets/logo.png";
 
 export const Welcome = () => {
+const navigate = useNavigate();
 return (
     <>
         <div className="welcome-overlay">
@@ -13,16 +15,14 @@ return (
                     <div className="welcome-logo-container">
                         <img className="welcome-logo" src={logo} alt="GitSum Logo" />
                     </div>
-                    <h1 className="welcome-title"><u>Welcome to GitSum</u></h1>
+                    <h1 className="GitSum"> GitSum</h1>
+                    <h2 className="welcome-title"><u>Welcome to GitSum</u></h2>
                     <p className="welcome-description">Your Codebase Summarizer.</p>
                     <p className="welcome-instruction">Get started by exploring your Codebase and Generating Summaries.</p>
                 </div>
 
                 <div className="welcome-button">
-                    <button
-                    className="get-started-button"
-                    onClick={() => (window.location.href = "/login")}
-                    >
+                    <button className="get-started-button" onClick={() => navigate("/login")}>
                     Get Started
                     </button>
                 </div>
