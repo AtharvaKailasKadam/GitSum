@@ -1,0 +1,24 @@
+.floating-icons {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* behind welcome panel */
+}
+.github-mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  color: #0F1720; /* Dark GitHub mark */
+  fill: currentColor;
+  opacity: 0.98;
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: transform 0s linear;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.08));
+}
+
+@media (max-width: 600px) {
+  .floating-icons { display: none; }
+}
