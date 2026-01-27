@@ -7,17 +7,15 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
-  /* Prevent zoom reset on viewport resize */
-  overflow: clip; /* Modern replace for hidden */
+  overflow: auto;
 }
 
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-  /* Single definitive overflow rule */
-  overflow: hidden;
+  overflow: auto;
   background-color: #3d2e44;
   
   /* Font rendering */
@@ -34,11 +32,9 @@ body {
 
 #root {
   width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  /* Prevent root from triggering layout recalculations */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   contain: layout style paint;
 }
 
