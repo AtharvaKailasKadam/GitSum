@@ -3,22 +3,19 @@
 * {
     box-sizing: border-box;
 }
-
 body {
-    overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #3d2e44;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
     width: 100%;
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
 }
+
 
 /* ================= BACKGROUND ================= */
 
