@@ -2,7 +2,11 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0; /* behind welcome panel */
+  z-index: 0;
+  
+  /* Prevent affecting document layout */
+  contain: layout style paint;
+  will-change: contents;
 }
 .github-mark {
   position: absolute;

@@ -1,24 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #3d2e44;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+/* Don't redefine body here - use index.css global reset */
 
 /* ================= BACKGROUND ================= */
 
@@ -30,6 +12,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    /* Production-safe containment */
+    contain: layout style paint;
+    will-change: contents;
+    
+    /* Remove conflicting overflow properties */
+    overflow: hidden;
 }
 
 .welcome-logo-container img {

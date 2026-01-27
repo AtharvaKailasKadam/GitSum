@@ -4,4 +4,21 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    /* Prevent CSS order issues in production */
+    cssCodeSplit: false,
+    /* Ensure consistent minification */
+    minify: 'terser',
+    terserOptions: {
+      compress: { drop_console: false },
+    },
+    /* Disable source maps if not needed (reduces size) */
+    sourcemap: false,
+  },
+  /* Ensure viewport is preserved during dev */
+  server: {
+    headers: {
+      'X-UA-Compatible': 'IE=edge',
+    },
+  },
 })
