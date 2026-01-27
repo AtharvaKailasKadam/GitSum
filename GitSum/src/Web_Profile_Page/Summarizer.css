@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-/* Don't redefine body - inherited from index.css */
-
-/* ================= BACKGROUND & OVERLAY ================= */
-
 .summarizer-overlay {
     background: linear-gradient(180deg, #3d2e44 0%, #2d1f2b 50%, #ff9c42 100%);
     position: relative;
@@ -18,7 +14,6 @@
     contain: layout style;
 }
 
-/* Logo Container */
 .logo-container {
     position: fixed;
     top: 20px;
@@ -69,8 +64,6 @@
     will-change: transform;
     overflow-y: auto;
     max-height: 90vh;
-}
-
 @keyframes slideInUp {
     from {
         opacity: 0;
@@ -81,8 +74,6 @@
         transform: translateY(0);
     }
 }
-
-/* ================= LOADING & ERROR ================= */
 
 .loading-container,
 .error-container {
