@@ -50,8 +50,6 @@
     opacity: 0;
     transform: translateY(30px);
     animation: slideInUp 0.6s ease-out forwards;
-    overflow-y: auto;
-    max-height: 90vh;
 }
 
 .welcome-container:hover {
