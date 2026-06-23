@@ -19,7 +19,6 @@ export const Summarizer = () => {
                 setLoading(true);
                 setError(null);
 
-                // Fetch user profile data
                 const userResponse = await fetch(`https://api.github.com/users/${username}`);
                 if (!userResponse.ok) {
                     throw new Error("User not found");
@@ -94,7 +93,6 @@ export const Summarizer = () => {
         totalForks: repositories.reduce((acc, repo) => acc + (repo.forks_count || 0), 0),
     };
 
-    // Language logos mapping
     const languageLogos = {
         JavaScript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
         Python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
@@ -119,7 +117,6 @@ export const Summarizer = () => {
         Lua: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg",
     };
 
-    // Framework logos mapping
     const frameworkLogos = {
         React: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
         Vue: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
@@ -142,7 +139,6 @@ export const Summarizer = () => {
         Tailwind: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
     };
 
-    // Detect frameworks from repositories
     const detectFrameworks = () => {
         const frameworks = new Set();
         const frameworkPatterns = {
@@ -205,7 +201,6 @@ export const Summarizer = () => {
         <div className="summarizer-overlay">
             <FloatingLanguages languages={languages} />
 
-            {/* Logo Top Left */}
             <div className="logo-container">
                 <img src={logo} alt="GitSum Logo" className="gitsum-logo" />
             </div>
@@ -248,7 +243,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Quick Statistics Section */}
                 <section className="stats-section">
                     <h2 className="section-title">📊 Quick Statistics</h2>
                     <div className="stats-grid">
@@ -279,7 +273,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Programming Languages & Frameworks Section */}
                 <section className="tech-stack-section">
                     <h2 className="section-title">💻 Tech Stack & Frameworks</h2>
                     <div className="tech-stack-container">
@@ -303,7 +296,6 @@ export const Summarizer = () => {
                             </div>
                         </div>
 
-                        {/* Frameworks */}
                         {frameworks.length > 0 && (
                             <div className="tech-category">
                                 <h3 className="tech-category-title">🚀 Frameworks & Tools</h3>
@@ -327,7 +319,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* GitHub Stats Cards Section */}
                 <section className="github-stats-section">
                     <h2 className="section-title">📈 GitHub Statistics</h2>
 
@@ -344,7 +335,6 @@ export const Summarizer = () => {
                             />
                         </div>
 
-                        {/* Top Languages Card */}
                         <div className="stats-card-wrapper">
                             <img
                                 src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=radical&hide_title=true`}
@@ -358,7 +348,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Contribution Streak Section */}
                 <section className="contribution-section">
                     <h2 className="section-title">🔥 Contribution Streak</h2>
                     <div className="graph-container">
@@ -373,7 +362,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Activity Graph Section */}
                 <section className="activity-section">
                     <h2 className="section-title">📅 Commit Activity Graph</h2>
                     <div className="graph-container">
@@ -388,7 +376,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Profile Summary Card */}
                 <section className="profile-summary-section">
                     <h2 className="section-title">🏆 Achievements Showcase</h2>
                     <div className="graph-container">
@@ -403,7 +390,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Language Analytics Section */}
                 <section className="language-analytics-section">
                     <h2 className="section-title">🎨 Language Usage Analytics</h2>
 
@@ -420,7 +406,6 @@ export const Summarizer = () => {
                             />
                         </div>
 
-                        {/* Most Commit Language */}
                         <div className="analytics-card-wrapper">
                             <img
                                 src={`https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=${username}&theme=radical`}
@@ -434,7 +419,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Coding Habits Section */}
                 <section className="coding-habits-section">
                     <h2 className="section-title">⏰ Coding Habits</h2>
                     <div className="graph-container">
@@ -449,7 +433,6 @@ export const Summarizer = () => {
                     </div>
                 </section>
 
-                {/* Languages Bar Section */}
                 {Object.keys(languages).length > 0 && (
                     <section className="languages-section">
                         <h2 className="section-title">🧠 Repository Languages</h2>
@@ -474,7 +457,6 @@ export const Summarizer = () => {
                     </section>
                 )}
 
-                {/* Repository List Section */}
                 {repositories.length > 0 && (
                     <section className="repos-section">
                         <h2 className="section-title">⭐ Top Repositories</h2>
@@ -514,7 +496,6 @@ export const Summarizer = () => {
                     </section>
                 )}
 
-                {/* Footer Section */}
                 <section className="footer-section">
                     <div className="footer-content">
                         <p className="footer-text">
@@ -533,3 +514,4 @@ export const Summarizer = () => {
         </div>
     );
 };
+// Still working on it.
