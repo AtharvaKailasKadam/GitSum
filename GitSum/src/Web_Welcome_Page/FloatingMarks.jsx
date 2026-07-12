@@ -1,11 +1,16 @@
-// AI Generated Effects. Do not edit manually.
-import React, { useEffect, useRef } from "react";
+// Custom physics engine for floating GitHub marks.
+// Pauses when the tab is hidden (visibilitychange) to save CPU/battery.
+// Skips animation entirely when prefers-reduced-motion is set.
+import { useEffect, useRef } from "react";
 import "./FloatingMarks.css";
 
 export default function FloatingMarks({ count = 14 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    // Respect prefers-reduced-motion — skip the entire animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -15,7 +20,7 @@ export default function FloatingMarks({ count = 14 }) {
     const icons = [];
 
     for (let i = 0; i < count; i++) {
-      const size = 20 + Math.random() * 40; // 20-60 px
+      const size = 20 + Math.random() * 40;
       const radius = size / 2;
       const x = Math.random() * (bounds.width - size) + radius;
       const y = Math.random() * (bounds.height - size) + radius;
@@ -28,94 +33,72 @@ export default function FloatingMarks({ count = 14 }) {
 
     let last = performance.now();
     let rafId;
+    let paused = document.hidden;
 
     const update = (now) => {
-      const dt = Math.min(50, now - last) / 1000; // seconds
+      if (paused) { rafId = requestAnimationFrame(update); return; }
+      const dt = Math.min(50, now - last) / 1000;
       last = now;
       bounds = getBounds();
 
-      // Move and wall collisions
       for (let k = 0; k < icons.length; k++) {
         const a = icons[k];
         a.x += a.vx * dt;
         a.y += a.vy * dt;
-
-        if (a.x - a.radius < 0) {
-          a.x = a.radius;
-          a.vx = Math.abs(a.vx) * 0.95;
-        }
-        if (a.x + a.radius > bounds.width) {
-          a.x = bounds.width - a.radius;
-          a.vx = -Math.abs(a.vx) * 0.95;
-        }
-        if (a.y - a.radius < 0) {
-          a.y = a.radius;
-          a.vy = Math.abs(a.vy) * 0.95;
-        }
-        if (a.y + a.radius > bounds.height) {
-          a.y = bounds.height - a.radius;
-          a.vy = -Math.abs(a.vy) * 0.95;
-        }
+        if (a.x - a.radius < 0)          { a.x = a.radius;              a.vx =  Math.abs(a.vx) * 0.95; }
+        if (a.x + a.radius > bounds.width) { a.x = bounds.width - a.radius; a.vx = -Math.abs(a.vx) * 0.95; }
+        if (a.y - a.radius < 0)           { a.y = a.radius;              a.vy =  Math.abs(a.vy) * 0.95; }
+        if (a.y + a.radius > bounds.height){ a.y = bounds.height - a.radius; a.vy = -Math.abs(a.vy) * 0.95; }
       }
 
-      // Pair collisions (simple elastic for equal mass)
       for (let i = 0; i < icons.length; i++) {
         for (let j = i + 1; j < icons.length; j++) {
-          const A = icons[i];
-          const B = icons[j];
-          let dx = B.x - A.x;
-          let dy = B.y - A.y;
-          let dist = Math.hypot(dx, dy);
+          const A = icons[i], B = icons[j];
+          const dx = B.x - A.x, dy = B.y - A.y;
+          const dist = Math.hypot(dx, dy);
           const minDist = A.radius + B.radius;
           if (dist < minDist && dist > 0) {
             const overlap = (minDist - dist) / 2;
-            const nx = dx / dist;
-            const ny = dy / dist;
-
-            // resolve interpenetration
-            A.x -= nx * overlap;
-            A.y -= ny * overlap;
-            B.x += nx * overlap;
-            B.y += ny * overlap;
-
-            // swap normal velocity components
+            const nx = dx / dist, ny = dy / dist;
+            A.x -= nx * overlap; A.y -= ny * overlap;
+            B.x += nx * overlap; B.y += ny * overlap;
             const vA = A.vx * nx + A.vy * ny;
             const vB = B.vx * nx + B.vy * ny;
             const dv = vA - vB;
             if (dv !== 0) {
-              A.vx -= dv * nx;
-              A.vy -= dv * ny;
-              B.vx += dv * nx;
-              B.vy += dv * ny;
+              A.vx -= dv * nx; A.vy -= dv * ny;
+              B.vx += dv * nx; B.vy += dv * ny;
             }
           }
         }
       }
 
-      // Render positions
       for (let i = 0; i < icons.length; i++) {
         const el = document.getElementById(`gh-mark-${i}`);
         if (el) {
           const a = icons[i];
-          const scale = a.size / 24;
-          const tx = Math.round(a.x - a.radius);
-          const ty = Math.round(a.y - a.radius);
-          el.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+          el.style.transform = `translate(${Math.round(a.x - a.radius)}px, ${Math.round(a.y - a.radius)}px) scale(${a.size / 24})`;
         }
       }
 
       rafId = requestAnimationFrame(update);
     };
 
-    rafId = requestAnimationFrame(update);
-    const onResize = () => {
-      bounds = getBounds();
+    // Pause/resume on tab visibility change
+    const onVisibility = () => {
+      paused = document.hidden;
+      if (!paused) last = performance.now();
     };
-    window.addEventListener("resize", onResize);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    rafId = requestAnimationFrame(update);
+    const onResize = () => { bounds = getBounds(); };
+    window.addEventListener('resize', onResize);
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [count]);
 

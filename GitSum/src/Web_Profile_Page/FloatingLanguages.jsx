@@ -36,6 +36,9 @@ export default function FloatingLanguages({ languages = {} }) {
   const floatingLanguages = Object.keys(languages).slice(0, 12);
 
   useEffect(() => {
+    // Respect prefers-reduced-motion — skip the entire animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const container = containerRef.current;
     if (!container || floatingLanguages.length === 0) return;
 
@@ -58,8 +61,13 @@ export default function FloatingLanguages({ languages = {} }) {
 
     let last = performance.now();
     let rafId;
+    let paused = document.hidden;
 
     const update = (now) => {
+      if (paused) {
+        rafId = requestAnimationFrame(update);
+        return;
+      }
       const dt = Math.min(50, now - last) / 1000;
       last = now;
       bounds = getBounds();
@@ -135,6 +143,13 @@ export default function FloatingLanguages({ languages = {} }) {
       rafId = requestAnimationFrame(update);
     };
 
+    // Pause/resume on tab visibility change
+    const onVisibility = () => {
+      paused = document.hidden;
+      if (!paused) last = performance.now();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     rafId = requestAnimationFrame(update);
 
     const handleResize = () => {
@@ -146,6 +161,7 @@ export default function FloatingLanguages({ languages = {} }) {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [floatingLanguages]);
 

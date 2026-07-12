@@ -21,4 +21,8 @@ export default defineConfig({
       'X-UA-Compatible': 'IE=edge',
     },
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+  },
 })

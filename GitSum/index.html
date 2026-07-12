@@ -3,8 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/logo.png" type="image/png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GitSum</title>
+    
+    <!-- Viewport settings for iOS/mobile safe height and zoom prevention -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- SEO Meta Tags -->
+    <title>GitSum — GitHub Profile Summarizer</title>
+    <meta name="description" content="Visualize your GitHub journey at a glance. Explore beautiful stats, top repositories, language analytics, contribution streaks, and coding habits." />
+    <meta name="keywords" content="github, profile, stats, summarizer, analytics, portfolio, developer tools" />
+    <meta name="author" content="Atharva Kailas Kadam" />
+
+    <!-- Open Graph / Facebook / LinkedIn Link Previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gitsum.vercel.app/" />
+    <meta property="og:title" content="GitSum — GitHub Profile Summarizer" />
+    <meta property="og:description" content="Visualize your GitHub stats, top repositories, language analytics, contribution streaks, and coding habits instantly." />
+    <meta property="og:image" content="https://gitsum.vercel.app/og-image.png" />
+
+    <!-- Twitter Link Previews -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="GitSum — GitHub Profile Summarizer" />
+    <meta property="twitter:description" content="Visualize your GitHub stats, top repositories, language analytics, contribution streaks, and coding habits instantly." />
+    <meta property="twitter:image" content="https://gitsum.vercel.app/og-image.png" />
+
+    <!-- Font and Asset Preconnect Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+    <!-- Devicons CSS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
   </head>
   <body>
     <div id="root"></div>
