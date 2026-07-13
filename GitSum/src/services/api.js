@@ -117,7 +117,7 @@ async function handleGitHubFallback(url, username) {
 
   if (path.startsWith('insights/')) {
     return {
-      insights: `### AI Narrative (Offline Mode)\nYour backend is currently offline or not configured. To enable AI-powered developer insights and Q&A chat, please run the Express backend on \`http://localhost:3001\` or configure the \`VITE_API_BASE_URL\` environment variable on Vercel.`
+      summary: `AI Narrative (Offline Mode)\n\nYour backend is currently offline or not configured. To enable AI-powered developer insights and Q&A chat, please run the Express backend on http://localhost:3001 or configure the VITE_API_BASE_URL environment variable on Vercel.`
     };
   }
 
