@@ -349,44 +349,139 @@ githubRouter.get('/repos/health/:username', async (req, res, next) => {
   }
 });
 
-/** Helper to generate fallback SVG when github-readme-stats is down */
-function getFallbackStatsSvg(username, theme, isTopLangs = false) {
+/** Helper to render a beautiful local GitHub stats card */
+function renderStatsSvg(username, stats, theme) {
   const isLight = theme === 'light';
   const bg = isLight ? '#ffffff' : '#0d1117';
   const border = isLight ? '#e1e4e8' : '#30363d';
   const text = isLight ? '#24292e' : '#c9d1d9';
-  const textMuted = isLight ? '#586069' : '#8b949e';
+  const title = isLight ? '#ff6200' : '#ff9c42';
+  const accent = isLight ? '#ff6200' : '#ff9c42';
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
+  <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">${username}'s GitHub Stats</text>
+  
+  <!-- Total Stars -->
+  <g transform="translate(25, 55)">
+    <path fill="${accent}" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" transform="scale(1.1)"/>
+    <text x="25" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="${text}">Total Stars:</text>
+    <text x="140" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="${accent}">${stats.totalStars}</text>
+  </g>
+
+  <!-- Total Commits -->
+  <g transform="translate(25, 82)">
+    <path fill="${accent}" d="M10.5 7.75a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm1.43.75a4.002 4.002 0 0 0-7.86 0H.75a.75.75 0 1 0 0 1.5h3.32a4.002 4.002 0 0 0 7.86 0h3.32a.75.75 0 1 0 0-1.5h-3.32Z" transform="scale(1.1)"/>
+    <text x="25" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="${text}">Total Commits:</text>
+    <text x="140" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="${accent}">${stats.totalCommits}</text>
+  </g>
+
+  <!-- Total Forks -->
+  <g transform="translate(25, 109)">
+    <path fill="${accent}" d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v5.256a2.251 2.251 0 1 0 1.5 0V5.372Zm-1.25 7.378a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm7.5-10a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v.628A2.25 2.25 0 0 0 7.5 7.75h-.75a.75.75 0 0 0 0 1.5h.75a3.75 3.75 0 0 1 3.75 3.75v.628a2.251 2.251 0 1 0 1.5 0V5.494ZM11.25 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" transform="scale(1.1)"/>
+    <text x="25" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="${text}">Total Forks:</text>
+    <text x="140" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="${accent}">${stats.totalForks}</text>
+  </g>
+
+  <!-- Public Repos -->
+  <g transform="translate(25, 136)">
+    <path fill="${accent}" d="M3 2.75C3 1.784 3.784 1 4.75 1h7.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 12 15H4.75A1.75 1.75 0 0 1 3 13.25V2.75Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h7.25a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25H4.75Z" transform="scale(1.1)"/>
+    <text x="25" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="${text}">Public Repos:</text>
+    <text x="140" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="${accent}">${stats.publicRepos}</text>
+  </g>
+
+  <!-- Followers -->
+  <g transform="translate(25, 163)">
+    <path fill="${accent}" d="M5.5 3.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM2 2.5a3.5 3.5 0 1 1 7 0v.5H2v-.5Zm10 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-1.5.5a3.5 3.5 0 0 1 4.25 3.429v.571h-5v-.5a3.486 3.486 0 0 0-1.684-3H10.5ZM1.025 8.006A6.002 6.002 0 0 1 11 9.5v.5H1v-.5c0-1.155.324-2.234.896-3.153ZM10 9.5a4.49 4.49 0 0 0-.896-2.653A5.495 5.495 0 0 1 14 9.5v.5h-4v-.5Z" transform="scale(1.1)"/>
+    <text x="25" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="${text}">Followers:</text>
+    <text x="140" y="12" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="${accent}">${stats.followers}</text>
+  </g>
+</svg>`;
+}
+
+/** Helper to render a beautiful local GitHub top languages card */
+function renderTopLangsSvg(username, sortedLangs, theme) {
+  const isLight = theme === 'light';
+  const bg = isLight ? '#ffffff' : '#0d1117';
+  const border = isLight ? '#e1e4e8' : '#30363d';
+  const text = isLight ? '#24292e' : '#c9d1d9';
+  const title = isLight ? '#ff6200' : '#ff9c42';
+  const accent = isLight ? '#ff6200' : '#ff9c42';
+
+  const langColors = {
+    JavaScript: '#f1e05a',
+    TypeScript: '#3178c6',
+    HTML: '#e34c26',
+    CSS: '#563d7c',
+    Python: '#3572A5',
+    Java: '#b07219',
+    'C++': '#f34b7d',
+    C: '#555555',
+    'C#': '#178600',
+    Go: '#00ADD8',
+    Rust: '#dea584',
+    Ruby: '#701516',
+    PHP: '#4F5D95',
+    Swift: '#F05138',
+    Shell: '#89e051',
+    Dart: '#00B4AB'
+  };
+
+  let langItems = '';
+  if (sortedLangs.length === 0) {
+    langItems = `<text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">No languages detected in public repositories.</text>`;
+  } else {
+    sortedLangs.forEach((lang, index) => {
+      const yOffset = 58 + index * 26;
+      const color = langColors[lang.name] || '#858585';
+      const pctWidth = Math.round(lang.percentage * 1.5); // Max width of progress bar is 150px
+      langItems += `
+    <g transform="translate(25, ${yOffset})">
+      <circle cx="5" cy="6" r="5" fill="${color}" />
+      <text x="18" y="10" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="${text}">${lang.name}</text>
+      <text x="125" y="10" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="${text}">${lang.percentage}%</text>
+      
+      <!-- Progress Bar -->
+      <rect x="175" y="1" width="150" height="8" rx="4" fill="${isLight ? '#e1e4e8' : '#21262d'}" />
+      <rect x="175" y="1" width="${pctWidth}" height="8" rx="4" fill="${color}" />
+    </g>`;
+    });
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
+  <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">Top Languages</text>
+  
+  ${langItems}
+</svg>`;
+}
+
+/** Render error stats card */
+function getErrorStatsSvg(username, theme, message) {
+  const isLight = theme === 'light';
+  const bg = isLight ? '#ffffff' : '#0d1117';
+  const border = isLight ? '#e1e4e8' : '#30363d';
+  const text = isLight ? '#24292e' : '#c9d1d9';
   const title = isLight ? '#ff6200' : '#ff9c42';
 
-  if (isTopLangs) {
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
   <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
-  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">Top Languages</text>
-  <text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">Languages stats temporarily unavailable</text>
-  <text x="25" y="105" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">The external statistics service is currently offline.</text>
-  <text x="25" y="125" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">You can view the local language analytics charts below.</text>
+  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">Error Loading Stats</text>
+  <text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">${message}</text>
 </svg>`;
-  } else {
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
-  <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
-  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">GitHub Stats</text>
-  <text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">Stats temporarily unavailable</text>
-  <text x="25" y="105" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">The external statistics service is currently offline.</text>
-  <text x="25" y="125" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">Your profile overview and repository details are available below.</text>
-</svg>`;
-  }
 }
 
 /**
  * GET /api/stats-card/:username
- * Proxies to github-readme-stats.vercel.app and caches the SVG to prevent rate limiting.
- * Returns local fallback SVG on failure with 200 status to avoid console errors.
+ * Dynamically computes and renders the stats card SVG locally.
  */
 githubRouter.get('/stats-card/:username', async (req, res) => {
   const { username } = req.params;
   const theme = req.query.theme || 'dark';
-  const textClr = theme === 'light' ? '111118' : 'f0f0f5';
-  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
   
   const cacheKey = `stats-card:${username.toLowerCase()}:${theme}`;
   const cachedSvg = cacheGet(cacheKey);
@@ -397,42 +492,72 @@ githubRouter.get('/stats-card/:username', async (req, res) => {
     return res.send(cachedSvg);
   }
 
-  const targetUrl = `https://github-readme-stats.vercel.app/api?username=${encodeURIComponent(username)}&show_icons=true&theme=transparent&hide_border=true&text_color=${textClr}&icon_color=${accentClr}&title_color=${accentClr}`;
-
   try {
-    const response = await fetch(targetUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(5000)
-    });
-
-    if (response.ok) {
-      const svgText = await response.text();
-      cacheSet(cacheKey, svgText, 14400); // Cache for 4 hours
-      res.setHeader('Content-Type', 'image/svg+xml');
-      res.setHeader('X-Cache', 'MISS');
-      return res.send(svgText);
-    } else {
-      console.warn(`External stats-card returned status ${response.status} for ${username}`);
+    // 1. Fetch user profile
+    const userCacheKey = `user:${username.toLowerCase()}`;
+    let user = cacheGet(userCacheKey);
+    if (!user) {
+      user = await githubFetch(`${GITHUB_API_BASE}/users/${username}`);
+      cacheSet(userCacheKey, user);
     }
-  } catch (err) {
-    console.warn(`Failed to fetch external stats-card for ${username}: ${err.message}`);
-  }
 
-  const fallback = getFallbackStatsSvg(username, theme, false);
-  res.setHeader('Content-Type', 'image/svg+xml');
-  res.send(fallback);
+    // 2. Fetch repos
+    const reposCacheKey = `repos:${username.toLowerCase()}`;
+    let repos = cacheGet(reposCacheKey);
+    if (!repos) {
+      repos = await githubFetch(
+        `${GITHUB_API_BASE}/users/${username}/repos?sort=stars&per_page=100`
+      );
+      cacheSet(reposCacheKey, repos);
+    }
+
+    // 3. Fetch contributions
+    const contributionsCacheKey = `contributions:${username.toLowerCase()}`;
+    let contributions = cacheGet(contributionsCacheKey);
+    if (!contributions) {
+      try {
+        contributions = await fetchContributions(username);
+        cacheSet(contributionsCacheKey, contributions, 3600);
+      } catch (err) {
+        contributions = { totalContributions: 0 };
+      }
+    }
+
+    // 4. Calculate stats
+    const totalStars = repos.reduce((sum, r) => sum + (r.stargazers_count ?? 0), 0);
+    const totalForks = repos.reduce((sum, r) => sum + (r.forks_count ?? 0), 0);
+    const totalCommits = contributions.totalContributions ?? 0;
+    const publicRepos = user.public_repos ?? 0;
+    const followers = user.followers ?? 0;
+
+    const svg = renderStatsSvg(username, {
+      totalStars,
+      totalCommits,
+      totalForks,
+      publicRepos,
+      followers
+    }, theme);
+
+    cacheSet(cacheKey, svg, 14400); // Cache for 4 hours
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('X-Cache', 'MISS');
+    return res.send(svg);
+
+  } catch (err) {
+    console.error(`Failed to generate stats-card for ${username}: ${err.message}`);
+    const errorSvg = getErrorStatsSvg(username, theme, err.message || 'Unknown error');
+    res.setHeader('Content-Type', 'image/svg+xml');
+    return res.send(errorSvg);
+  }
 });
 
 /**
  * GET /api/top-langs-card/:username
- * Proxies to github-readme-stats.vercel.app and caches the SVG to prevent rate limiting.
- * Returns local fallback SVG on failure with 200 status to avoid console errors.
+ * Dynamically computes and renders the top languages SVG locally.
  */
 githubRouter.get('/top-langs-card/:username', async (req, res) => {
   const { username } = req.params;
   const theme = req.query.theme || 'dark';
-  const textClr = theme === 'light' ? '111118' : 'f0f0f5';
-  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
   
   const cacheKey = `top-langs-card:${username.toLowerCase()}:${theme}`;
   const cachedSvg = cacheGet(cacheKey);
@@ -443,28 +568,47 @@ githubRouter.get('/top-langs-card/:username', async (req, res) => {
     return res.send(cachedSvg);
   }
 
-  const targetUrl = `https://github-readme-stats.vercel.app/api/top-langs/?username=${encodeURIComponent(username)}&layout=compact&theme=transparent&hide_border=true&text_color=${textClr}&title_color=${accentClr}`;
-
   try {
-    const response = await fetch(targetUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(5000)
+    // Fetch repos
+    const reposCacheKey = `repos:${username.toLowerCase()}`;
+    let repos = cacheGet(reposCacheKey);
+    if (!repos) {
+      repos = await githubFetch(
+        `${GITHUB_API_BASE}/users/${username}/repos?sort=stars&per_page=100`
+      );
+      cacheSet(reposCacheKey, repos);
+    }
+
+    // Calculate top languages
+    const langMap = {};
+    let totalCount = 0;
+    repos.forEach(repo => {
+      if (repo.language) {
+        langMap[repo.language] = (langMap[repo.language] || 0) + 1;
+        totalCount += 1;
+      }
     });
 
-    if (response.ok) {
-      const svgText = await response.text();
-      cacheSet(cacheKey, svgText, 14400); // Cache for 4 hours
-      res.setHeader('Content-Type', 'image/svg+xml');
-      res.setHeader('X-Cache', 'MISS');
-      return res.send(svgText);
-    } else {
-      console.warn(`External top-langs-card returned status ${response.status} for ${username}`);
-    }
-  } catch (err) {
-    console.warn(`Failed to fetch external top-langs-card for ${username}: ${err.message}`);
-  }
+    const sortedLangs = Object.entries(langMap)
+      .map(([name, count]) => ({
+        name,
+        count,
+        percentage: totalCount > 0 ? Math.round((count / totalCount) * 100) : 0
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
 
-  const fallback = getFallbackStatsSvg(username, theme, true);
-  res.setHeader('Content-Type', 'image/svg+xml');
-  res.send(fallback);
+    const svg = renderTopLangsSvg(username, sortedLangs, theme);
+
+    cacheSet(cacheKey, svg, 14400); // Cache for 4 hours
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('X-Cache', 'MISS');
+    return res.send(svg);
+
+  } catch (err) {
+    console.error(`Failed to generate top-langs-card for ${username}: ${err.message}`);
+    const errorSvg = getErrorStatsSvg(username, theme, err.message || 'Unknown error');
+    res.setHeader('Content-Type', 'image/svg+xml');
+    return res.send(errorSvg);
+  }
 });
