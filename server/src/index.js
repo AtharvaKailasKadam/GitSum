@@ -22,7 +22,8 @@ app.use(cors({
       return callback(null, true);
     }
     
-    if (origin === config.clientOrigin) {
+    const allowedOrigins = (config.clientOrigin || '').split(',').map(o => o.trim());
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
     
