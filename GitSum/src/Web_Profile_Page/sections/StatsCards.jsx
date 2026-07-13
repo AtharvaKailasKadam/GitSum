@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 
 import { useTheme } from '../../hooks/useTheme.js';
+import { API_BASE } from '../../services/api.js';
 
 /** Reusable embedded stats image with error fallback */
 function StatsImage({ src, alt, className = '' }) {
@@ -24,8 +25,6 @@ StatsImage.propTypes = { src: PropTypes.string.isRequired, alt: PropTypes.string
 
 export function StatsCards({ username }) {
   const theme = useTheme();
-  const textClr = theme === 'light' ? '111118' : 'f0f0f5';
-  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
 
   return (
     <motion.section
@@ -40,11 +39,11 @@ export function StatsCards({ username }) {
       <h2 className="section-title"><span aria-hidden="true">📈</span> GitHub Statistics</h2>
       <div className="stats-cards-grid">
         <StatsImage
-          src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=transparent&hide_border=true&text_color=${textClr}&icon_color=${accentClr}&title_color=${accentClr}`}
+          src={`${API_BASE}/stats-card/${username}?theme=${theme}`}
           alt={`${username}'s overall GitHub statistics`}
         />
         <StatsImage
-          src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=transparent&hide_border=true&text_color=${textClr}&title_color=${accentClr}`}
+          src={`${API_BASE}/top-langs-card/${username}?theme=${theme}`}
           alt={`${username}'s top programming languages`}
         />
       </div>

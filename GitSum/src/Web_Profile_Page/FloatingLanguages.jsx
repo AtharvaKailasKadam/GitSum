@@ -179,6 +179,7 @@ export default function FloatingLanguages({ languages = {} }) {
           <img
             src={languageLogos[lang]}
             alt={lang}
+            crossOrigin="anonymous"
             onError={(e) => {
               e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23ff9c42' width='50' height='50' rx='8'/%3E%3Ctext x='25' y='28' text-anchor='middle' fill='%23fff' font-size='14' font-weight='bold'%3E{lang.charAt(0)}%3C/text%3E%3C/svg%3E";
             }}

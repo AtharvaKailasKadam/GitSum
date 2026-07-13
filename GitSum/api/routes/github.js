@@ -347,3 +347,123 @@ githubRouter.get('/repos/health/:username', async (req, res, next) => {
     next(err);
   }
 });
+
+/** Helper to generate fallback SVG when github-readme-stats is down */
+function getFallbackStatsSvg(username, theme, isTopLangs = false) {
+  const isLight = theme === 'light';
+  const bg = isLight ? '#ffffff' : '#0d1117';
+  const border = isLight ? '#e1e4e8' : '#30363d';
+  const text = isLight ? '#24292e' : '#c9d1d9';
+  const textMuted = isLight ? '#586069' : '#8b949e';
+  const title = isLight ? '#ff6200' : '#ff9c42';
+
+  if (isTopLangs) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
+  <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
+  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">Top Languages</text>
+  <text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">Languages stats temporarily unavailable</text>
+  <text x="25" y="105" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">The external statistics service is currently offline.</text>
+  <text x="25" y="125" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">You can view the local language analytics charts below.</text>
+</svg>`;
+  } else {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="195" viewBox="0 0 400 195">
+  <rect width="398" height="193" x="1" y="1" rx="10" fill="${bg}" stroke="${border}" stroke-width="1"/>
+  <text x="25" y="35" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="${title}">GitHub Stats</text>
+  <text x="25" y="80" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="${text}">Stats temporarily unavailable</text>
+  <text x="25" y="105" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">The external statistics service is currently offline.</text>
+  <text x="25" y="125" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="${textMuted}">Your profile overview and repository details are available below.</text>
+</svg>`;
+  }
+}
+
+/**
+ * GET /api/stats-card/:username
+ * Proxies to github-readme-stats.vercel.app and caches the SVG to prevent rate limiting.
+ * Returns local fallback SVG on failure with 200 status to avoid console errors.
+ */
+githubRouter.get('/stats-card/:username', async (req, res) => {
+  const { username } = req.params;
+  const theme = req.query.theme || 'dark';
+  const textClr = theme === 'light' ? '111118' : 'f0f0f5';
+  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
+  
+  const cacheKey = `stats-card:${username.toLowerCase()}:${theme}`;
+  const cachedSvg = cacheGet(cacheKey);
+  
+  if (cachedSvg) {
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('X-Cache', 'HIT');
+    return res.send(cachedSvg);
+  }
+
+  const targetUrl = `https://github-readme-stats.vercel.app/api?username=${encodeURIComponent(username)}&show_icons=true&theme=transparent&hide_border=true&text_color=${textClr}&icon_color=${accentClr}&title_color=${accentClr}`;
+
+  try {
+    const response = await fetch(targetUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(5000)
+    });
+
+    if (response.ok) {
+      const svgText = await response.text();
+      cacheSet(cacheKey, svgText, 14400); // Cache for 4 hours
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.setHeader('X-Cache', 'MISS');
+      return res.send(svgText);
+    } else {
+      console.warn(`External stats-card returned status ${response.status} for ${username}`);
+    }
+  } catch (err) {
+    console.warn(`Failed to fetch external stats-card for ${username}: ${err.message}`);
+  }
+
+  const fallback = getFallbackStatsSvg(username, theme, false);
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.send(fallback);
+});
+
+/**
+ * GET /api/top-langs-card/:username
+ * Proxies to github-readme-stats.vercel.app and caches the SVG to prevent rate limiting.
+ * Returns local fallback SVG on failure with 200 status to avoid console errors.
+ */
+githubRouter.get('/top-langs-card/:username', async (req, res) => {
+  const { username } = req.params;
+  const theme = req.query.theme || 'dark';
+  const textClr = theme === 'light' ? '111118' : 'f0f0f5';
+  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
+  
+  const cacheKey = `top-langs-card:${username.toLowerCase()}:${theme}`;
+  const cachedSvg = cacheGet(cacheKey);
+  
+  if (cachedSvg) {
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('X-Cache', 'HIT');
+    return res.send(cachedSvg);
+  }
+
+  const targetUrl = `https://github-readme-stats.vercel.app/api/top-langs/?username=${encodeURIComponent(username)}&layout=compact&theme=transparent&hide_border=true&text_color=${textClr}&title_color=${accentClr}`;
+
+  try {
+    const response = await fetch(targetUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(5000)
+    });
+
+    if (response.ok) {
+      const svgText = await response.text();
+      cacheSet(cacheKey, svgText, 14400); // Cache for 4 hours
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.setHeader('X-Cache', 'MISS');
+      return res.send(svgText);
+    } else {
+      console.warn(`External top-langs-card returned status ${response.status} for ${username}`);
+    }
+  } catch (err) {
+    console.warn(`Failed to fetch external top-langs-card for ${username}: ${err.message}`);
+  }
+
+  const fallback = getFallbackStatsSvg(username, theme, true);
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.send(fallback);
+});

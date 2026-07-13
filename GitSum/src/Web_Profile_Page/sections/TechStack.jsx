@@ -26,6 +26,7 @@ function TechBadge({ item, index }) {
           className="tech-logo"
           loading="lazy"
           decoding="async"
+          crossOrigin="anonymous"
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       ) : (

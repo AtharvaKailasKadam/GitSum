@@ -10,7 +10,7 @@
  * to fetching public data directly from api.github.com client-side.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
+export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 // ─── Custom error types ───────────────────────────────────────────────────────
 
@@ -193,6 +193,12 @@ async function apiFetch(url, username = '') {
     return await handleGitHubFallback(url, username);
   }
 
+  // Handle Vite proxy errors or offline backend server gracefully by falling back to client-side
+  if (res.status >= 500) {
+    console.warn(`Backend server returned status ${res.status}. Falling back to direct GitHub API client-side.`);
+    return await handleGitHubFallback(url, username);
+  }
+
   if (res.status === 404) throw new NotFoundError(username);
   if (res.status === 429) {
     const body = await res.json().catch(() => ({}));
@@ -262,6 +268,11 @@ export async function fetchInsights(username, payload, bypassCache = false) {
     return await handleGitHubFallback(`${API_BASE}/insights/${encodeURIComponent(username)}`, username);
   }
 
+  if (res.status >= 500) {
+    console.warn(`Insights server returned status ${res.status}. Falling back to offline message.`);
+    return await handleGitHubFallback(`${API_BASE}/insights/${encodeURIComponent(username)}`, username);
+  }
+
   if (res.status === 404) throw new NotFoundError(username);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   return res.json();
@@ -280,6 +291,11 @@ export async function askChat(username, question, conversationHistory, context) 
     });
   } catch {
     console.warn(`Connection for chat failed. Falling back to offline reply.`);
+    return await handleGitHubFallback(`${API_BASE}/chat/${encodeURIComponent(username)}`, username);
+  }
+
+  if (res.status >= 500) {
+    console.warn(`Chat server returned status ${res.status}. Falling back to offline reply.`);
     return await handleGitHubFallback(`${API_BASE}/chat/${encodeURIComponent(username)}`, username);
   }
 
