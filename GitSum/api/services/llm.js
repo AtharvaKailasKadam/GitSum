@@ -38,7 +38,7 @@ async function callGemini(prompt, system) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not configured in .env file.');
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
   
   // Combine system instructions with user prompt for standard models if needed, or pass systemInstruction property
   const payload = {
@@ -179,7 +179,7 @@ export async function callLLMChat(systemPrompt, history, userQuestion) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error('GEMINI_API_KEY is not configured in .env file.');
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
     
     // Map roles: 'user'/'assistant' are supported in Gemini
     const contents = history.map(h => ({
