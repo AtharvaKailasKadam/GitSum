@@ -14,6 +14,12 @@ export default defineConfig({
   },
   /* Ensure viewport is preserved during dev */
   server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      }
+    },
     headers: {
       'X-UA-Compatible': 'IE=edge',
     },

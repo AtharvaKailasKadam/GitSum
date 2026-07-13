@@ -10,7 +10,7 @@
  * to fetching public data directly from api.github.com client-side.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 // ─── Custom error types ───────────────────────────────────────────────────────
 
