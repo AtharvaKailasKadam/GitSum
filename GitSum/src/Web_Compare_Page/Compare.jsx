@@ -12,7 +12,11 @@ import './Compare.css';
 function CompareUserCard({ profile, stats, isWinner }) {
   return (
     <div className={`compare-user-card ${isWinner ? 'winner-glow' : ''}`}>
-      {isWinner && <span className="winner-label">🏆 Dominant Presence</span>}
+      {isWinner && (
+        <span className="winner-label" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Trophy/3D/trophy_3d.png" alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }} /> Dominant Presence
+        </span>
+      )}
       <div className="compare-user-header">
         <img src={profile.avatar_url} alt="" className="compare-user-avatar" />
         <div>
@@ -24,19 +28,27 @@ function CompareUserCard({ profile, stats, isWinner }) {
       
       <div className="compare-stats-list">
         <div className="compare-stat-row">
-          <span>📁 Public Repos:</span>
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Open%20file%20folder/3D/open_file_folder_3d.png" alt="" className="compare-3d-icon" /> Public Repos:
+          </span>
           <strong>{profile.public_repos}</strong>
         </div>
         <div className="compare-stat-row">
-          <span>👥 Followers:</span>
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png" alt="" className="compare-3d-icon" /> Followers:
+          </span>
           <strong>{profile.followers}</strong>
         </div>
         <div className="compare-stat-row">
-          <span>⭐ Total Stars:</span>
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Star/3D/star_3d.png" alt="" className="compare-3d-icon" /> Total Stars:
+          </span>
           <strong>{stats.totalStars}</strong>
         </div>
         <div className="compare-stat-row">
-          <span>🔀 Total Forks:</span>
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Crossed%20arrows/3D/crossed_arrows_3d.png" alt="" className="compare-3d-icon" /> Total Forks:
+          </span>
           <strong>{stats.totalForks}</strong>
         </div>
       </div>
@@ -134,8 +146,8 @@ export function Compare() {
     <div className="compare-page">
       {/* Topbar */}
       <header className="topbar">
-        <div className="topbar-left" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          <span className="topbar-logo-icon">⚔️</span>
+        <div className="topbar-left" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Crossed%20swords/3D/crossed_swords_3d.png" alt="" style={{ width: '28px', height: '28px', marginRight: '8px' }} />
           <span className="topbar-title font-title">Compare Mode</span>
         </div>
         <div className="topbar-actions">

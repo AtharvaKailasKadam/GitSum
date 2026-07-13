@@ -18,7 +18,7 @@ export function StreakCard({ username }) {
       id="activity"
       aria-label="Contribution streak"
     >
-      <h2 className="section-title"><span aria-hidden="true">🔥</span> Contribution Streak</h2>
+      <h2 className="section-title"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Fire/3D/fire_3d.png" alt="" className="header-3d-icon" /> Contribution Streak</h2>
       <div className="graph-container">
         <img
           src={`https://streak-stats.demolab.com?user=${username}&theme=transparent&hide_border=true&stroke=${strokeClr}&ring=${strokeClr}&fire=${strokeClr}&currStreakLabel=${labelClr}&dates=${datesClr}&sideLabels=${datesClr}&sideNums=${labelClr}&currStreakNum=${labelClr}`}

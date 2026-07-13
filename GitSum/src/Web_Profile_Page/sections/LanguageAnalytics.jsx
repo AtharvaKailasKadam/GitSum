@@ -16,7 +16,7 @@ export function LanguageAnalytics({ username }) {
       id="languages-detail"
       aria-label="Language usage analytics"
     >
-      <h2 className="section-title"><span aria-hidden="true">🎨</span> Language Analytics</h2>
+      <h2 className="section-title"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Artist%20palette/3D/artist_palette_3d.png" alt="" className="header-3d-icon" /> Language Analytics</h2>
       <div className="analytics-grid">
         <img
           src={`https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=${username}&theme=${cardTheme}`}

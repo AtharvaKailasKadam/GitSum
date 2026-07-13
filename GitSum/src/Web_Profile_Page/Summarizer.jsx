@@ -110,7 +110,8 @@ export function Summarizer() {
                 style: {
                     borderRadius: '0px',
                     padding: '24px',
-                }
+                },
+                skipFonts: true,
             });
             const link = document.createElement('a');
             link.href = dataUrl;
@@ -175,20 +176,20 @@ export function Summarizer() {
                     <span className="gitsum-logo-text comic-font">GitSum</span>
                 </div>
                 <div className="topbar-actions" aria-label="Dashboard actions">
-                    <button className="btn-ghost" onClick={() => setShowWrapped(true)} aria-label="Open GitHub Wrapped Year Recap">
-                        🎁 Wrapped
+                    <button className="btn-ghost" onClick={() => setShowWrapped(true)} aria-label="Open GitHub Wrapped Year Recap" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Wrapped%20gift/3D/wrapped_gift_3d.png" alt="" className="btn-3d-icon" /> Wrapped
                     </button>
-                    <button className="btn-ghost" onClick={triggerCompare} aria-label="Compare with another user">
-                        ⚔️ Compare
+                    <button className="btn-ghost" onClick={triggerCompare} aria-label="Compare with another user" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Crossed%20swords/3D/crossed_swords_3d.png" alt="" className="btn-3d-icon" /> Compare
                     </button>
-                    <button className="btn-ghost" onClick={printResume} aria-label="Print as developer resume">
-                        📄 Resume
+                    <button className="btn-ghost" onClick={printResume} aria-label="Print as developer resume" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Page%20facing%20up/3D/page_facing_up_3d.png" alt="" className="btn-3d-icon" /> Resume
                     </button>
-                    <button id="share-btn" className="btn-ghost" onClick={shareProfile} aria-label="Copy profile link">
-                        🔗 Share
+                    <button id="share-btn" className="btn-ghost" onClick={shareProfile} aria-label="Copy profile link" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Link/3D/link_3d.png" alt="" className="btn-3d-icon" /> Share
                     </button>
-                    <button className="btn-ghost" onClick={downloadImage} aria-label="Download dashboard as image">
-                        ⬇️ Export
+                    <button className="btn-ghost" onClick={downloadImage} aria-label="Download dashboard as image" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Down%20arrow/3D/down_arrow_3d.png" alt="" className="btn-3d-icon" /> Export
                     </button>
                     <ThemeToggle />
                 </div>

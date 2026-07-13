@@ -1637,8 +1637,8 @@
   }
 
   /* Reset layout constraints */
-  .Summarizer-Overlay,
-  .Summarizer-Container,
+  .summarizer-overlay,
+  .summarizer-container,
   .dashboard-grid {
     background: none !important;
     box-shadow: none !important;
@@ -1747,4 +1747,30 @@
     font-size: 0.85rem !important;
     margin: 0 !important;
   }
+}
+
+/* ── 3D Icons Styles ── */
+.btn-3d-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 6px;
+  display: inline-block;
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+.btn-ghost:hover .btn-3d-icon {
+  transform: translateY(-2px) scale(1.1);
+}
+
+.header-3d-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+  display: inline-block;
+  transform: translateY(-2px);
 }

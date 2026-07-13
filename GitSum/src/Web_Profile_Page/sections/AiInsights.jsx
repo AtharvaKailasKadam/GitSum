@@ -61,7 +61,7 @@ export function AiInsights({ username, profile, languages, frameworks, stats }) 
     >
       <div className="ai-insights-header">
         <h2 className="ai-insights-title">
-          <span className="ai-spark-icon" aria-hidden="true">✨</span> AI Developer Narrative
+          <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Sparkles/3D/sparkles_3d.png" alt="" className="header-3d-icon" /> AI Developer Narrative
         </h2>
         <button
           className="btn-regenerate"

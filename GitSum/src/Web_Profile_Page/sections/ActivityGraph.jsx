@@ -17,7 +17,7 @@ export function ActivityGraph({ username }) {
       transition={{ duration: 0.5 }}
       aria-label="Commit activity graph"
     >
-      <h2 className="section-title"><span aria-hidden="true">📅</span> Commit Activity</h2>
+      <h2 className="section-title"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Calendar/3D/calendar_3d.png" alt="" className="header-3d-icon" /> Commit Activity</h2>
       <div className="graph-container">
         <img
           src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${graphTheme}&bg_color=transparent&color=${textClr}&line=${accentClr}&point=${accentClr}&area=true&hide_border=true`}

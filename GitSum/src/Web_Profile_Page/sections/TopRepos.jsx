@@ -224,7 +224,7 @@ export function TopRepos({ repos, healthScores = {} }) {
     >
       <div className="repos-section-header">
         <h2 className="section-title">
-          <span aria-hidden="true">⭐</span> Top Repositories
+          <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Star/3D/star_3d.png" alt="" className="header-3d-icon" /> Top Repositories
           <span className="section-count">{processedRepos.length}</span>
         </h2>
         

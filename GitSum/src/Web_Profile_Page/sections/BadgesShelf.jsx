@@ -34,7 +34,7 @@ export function BadgesShelf({ stats, languages, healthScores, longestStreak }) {
       viewport={{ once: true, amount: 0.2 }}
       aria-label="Achievements and earned developer badges"
     >
-      <h2 className="section-title"><span aria-hidden="true">🎖️</span> Earned Badges</h2>
+      <h2 className="section-title"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Military%20medal/3D/military_medal_3d.png" alt="" className="header-3d-icon" /> Earned Badges</h2>
       
       <motion.div className="badges-shelf-grid" variants={shelfVariants}>
         {BADGE_RULES.map((badge) => {

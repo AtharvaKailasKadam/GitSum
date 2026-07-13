@@ -36,14 +36,17 @@ export function StatsCards({ username }) {
       id="overview-github"
       aria-label="GitHub statistics cards"
     >
-      <h2 className="section-title"><span aria-hidden="true">📈</span> GitHub Statistics</h2>
+      <h2 className="section-title">
+        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Chart%20increasing/3D/chart_increasing_3d.png" alt="" className="header-3d-icon" />
+        GitHub Statistics
+      </h2>
       <div className="stats-cards-grid">
         <StatsImage
-          src={`${API_BASE}/stats-card/${username}?theme=${theme}`}
+          src={`${API_BASE}/stats-card/${username}?theme=${theme}&v=1.1`}
           alt={`${username}'s overall GitHub statistics`}
         />
         <StatsImage
-          src={`${API_BASE}/top-langs-card/${username}?theme=${theme}`}
+          src={`${API_BASE}/top-langs-card/${username}?theme=${theme}&v=1.1`}
           alt={`${username}'s top programming languages`}
         />
       </div>

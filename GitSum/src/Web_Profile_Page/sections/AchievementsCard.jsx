@@ -15,7 +15,7 @@ export function AchievementsCard({ username }) {
       transition={{ duration: 0.5 }}
       aria-label="Profile achievements and summary"
     >
-      <h2 className="section-title"><span aria-hidden="true">🏆</span> Achievements Showcase</h2>
+      <h2 className="section-title"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Trophy/3D/trophy_3d.png" alt="" className="header-3d-icon" /> Achievements Showcase</h2>
       <div className="graph-container">
         <img
           src={`https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=${cardTheme}`}

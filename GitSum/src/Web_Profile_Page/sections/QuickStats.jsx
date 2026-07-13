@@ -73,7 +73,8 @@ export function QuickStats({ profile, totalStars, totalForks, totalSizeFormatted
       aria-label="Quick statistics"
     >
       <h2 className="section-title">
-        <span aria-hidden="true">📊</span> Quick Statistics
+        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Bar%20chart/3D/bar_chart_3d.png" alt="" className="header-3d-icon" />
+        Quick Statistics
       </h2>
       <div className="stats-grid" role="list">
         {all.map((stat, i) => (
