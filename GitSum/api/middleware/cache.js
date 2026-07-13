@@ -1,5 +1,5 @@
 import NodeCache from 'node-cache';
-import { config } from '../config.js';
+import { serverConfig as config } from '../config.js';
 
 /**
  * In-memory cache backed by node-cache.

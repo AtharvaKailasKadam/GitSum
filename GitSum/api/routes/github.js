@@ -1,5 +1,5 @@
 import express from 'express';
-import { config } from '../config.js';
+import { serverConfig as config } from '../config.js';
 import { cacheGet, cacheSet } from '../middleware/cache.js';
 import { NotFoundError, RateLimitError } from '../middleware/errorHandler.js';
 import { callLLM, callLLMChat } from '../services/llm.js';

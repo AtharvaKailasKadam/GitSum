@@ -1,4 +1,4 @@
-import { config } from '../config.js';
+import { serverConfig as config } from '../config.js';
 
 /**
  * Service to interact with GitHub GraphQL API

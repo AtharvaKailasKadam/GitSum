@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import { config } from '../config.js';
+import { serverConfig as config } from '../config.js';
 
 /**
  * Express rate limiter that protects the server (and the GitHub token's quota)

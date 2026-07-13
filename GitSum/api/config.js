@@ -4,7 +4,7 @@ import 'dotenv/config';
  * Centralised configuration — loaded once at startup.
  * All process.env access should go through here.
  */
-export const config = {
+export const serverConfig = {
   port: parseInt(process.env.PORT ?? '3001', 10),
 
   /**
