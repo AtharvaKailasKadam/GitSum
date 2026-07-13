@@ -1,5 +1,3 @@
-import { serverConfig as config } from '../config.js';
-
 /**
  * Service to call swappable LLM APIs (Gemini, Anthropic, OpenAI) via standard REST fetch requests.
  */

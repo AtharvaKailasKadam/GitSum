@@ -1,5 +1,4 @@
 import rateLimit from 'express-rate-limit';
-import { config } from '../config.js';
 
 /**
  * Express rate limiter that protects the server (and the GitHub token's quota)
@@ -7,7 +6,7 @@ import { config } from '../config.js';
  */
 export const apiRateLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute window
-  max: config.rateLimitPerMinute,
+  max: parseInt(process.env.RATE_LIMIT_RPM ?? '30', 10),
   standardHeaders: 'draft-7', // Return rate-limit info in the `RateLimit-*` headers
   legacyHeaders: false,
   message: {

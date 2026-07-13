@@ -1,5 +1,3 @@
-import { config } from '../config.js';
-
 /**
  * Service to interact with GitHub GraphQL API
  */
@@ -133,7 +131,7 @@ function parseContributionHtml(html) {
  * @returns {Promise<object>} The contribution calendar data
  */
 export async function fetchContributions(username) {
-  if (!config.githubToken) {
+  if (!process.env.GITHUB_TOKEN) {
     console.warn(`⚠️ No GITHUB_TOKEN configured. Fetching public contribution calendar for ${username}.`);
     try {
       const res = await fetch(`https://github.com/users/${encodeURIComponent(username)}/contributions`, {
@@ -157,7 +155,7 @@ export async function fetchContributions(username) {
     const res = await fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${config.githubToken}`,
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
         'User-Agent': 'GitSum-Server/1.0',
         'Content-Type': 'application/json',
       },

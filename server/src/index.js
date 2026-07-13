@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { config } from './config.js';
 import { githubRouter } from './routes/github.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiRateLimiter } from './middleware/rateLimiter.js';
@@ -22,7 +21,7 @@ app.use(cors({
       return callback(null, true);
     }
     
-    const allowedOrigins = (config.clientOrigin || '').split(',').map(o => o.trim());
+    const allowedOrigins = (process.env.CLIENT_ORIGIN || '').split(',').map(o => o.trim());
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
@@ -42,7 +41,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    githubAuth: config.githubToken ? 'token present (5000 req/hr)' : 'unauthenticated (60 req/hr)',
+    githubAuth: process.env.GITHUB_TOKEN ? 'token present (5000 req/hr)' : 'unauthenticated (60 req/hr)',
     cache: cacheStats(),
   });
 });
@@ -53,9 +52,10 @@ app.use('/api', githubRouter);
 app.use(errorHandler);
 
 // ─── Start ────────────────────────────────────────────────────────────────────
+const PORT = parseInt(process.env.PORT ?? '3001', 10);
 // Watch reload trigger
-app.listen(config.port, () => {
-  console.log(`✅ GitSum server running on http://localhost:${config.port}`);
-  console.log(`   GitHub auth: ${config.githubToken ? '🔐 PAT configured' : '⚠️  No token (60 req/hr)'}`);
-  console.log(`   CORS origin: ${config.clientOrigin}`);
+app.listen(PORT, () => {
+  console.log(`✅ GitSum server running on http://localhost:${PORT}`);
+  console.log(`   GitHub auth: ${process.env.GITHUB_TOKEN ? '🔐 PAT configured' : '⚠️  No token (60 req/hr)'}`);
+  console.log(`   CORS origin: ${process.env.CLIENT_ORIGIN}`);
 });

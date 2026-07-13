@@ -1,5 +1,4 @@
 import NodeCache from 'node-cache';
-import { serverConfig as config } from '../config.js';
 
 /**
  * In-memory cache backed by node-cache.
@@ -9,8 +8,10 @@ import { serverConfig as config } from '../config.js';
  *   user:<username>   → GitHub user object
  *   repos:<username>  → GitHub repos array
  */
+const CACHE_TTL_MS = parseInt(process.env.CACHE_TTL_MS ?? '300000', 10);
+
 const cache = new NodeCache({
-  stdTTL: Math.floor(config.cacheTtlMs / 1000), // node-cache works in seconds
+  stdTTL: Math.floor(CACHE_TTL_MS / 1000), // node-cache works in seconds
   checkperiod: 60, // auto-delete expired keys every 60s
   useClones: false, // skip deep-clone for performance (objects are read-only)
 });
@@ -29,7 +30,7 @@ export function cacheGet(key) {
  * @param {number} [ttlSeconds] — override default TTL
  */
 export function cacheSet(key, value, ttlSeconds) {
-  cache.set(key, value, ttlSeconds ?? Math.floor(config.cacheTtlMs / 1000));
+  cache.set(key, value, ttlSeconds ?? Math.floor(CACHE_TTL_MS / 1000));
 }
 
 /** Returns current cache stats (useful for the /health endpoint). */

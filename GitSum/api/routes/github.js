@@ -1,5 +1,4 @@
 import express from 'express';
-import { serverConfig as config } from '../config.js';
 import { cacheGet, cacheSet } from '../middleware/cache.js';
 import { NotFoundError, RateLimitError } from '../middleware/errorHandler.js';
 import { callLLM, callLLMChat } from '../services/llm.js';
@@ -8,6 +7,8 @@ import { chatRateLimiter } from '../middleware/rateLimiter.js';
 
 export const githubRouter = express.Router();
 
+const GITHUB_API_BASE = 'https://api.github.com';
+
 /** Build Authorization header if a PAT is configured. */
 function githubHeaders() {
   const headers = {
@@ -15,8 +16,8 @@ function githubHeaders() {
     'X-GitHub-Api-Version': '2022-11-28',
     'User-Agent': 'GitSum-Server/1.0',
   };
-  if (config.githubToken) {
-    headers['Authorization'] = `Bearer ${config.githubToken}`;
+  if (process.env.GITHUB_TOKEN) {
+    headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
   return headers;
 }
@@ -54,7 +55,7 @@ githubRouter.get('/user/:username', async (req, res, next) => {
       return res.json(cached);
     }
 
-    const data = await githubFetch(`${config.githubApiBase}/users/${username}`);
+    const data = await githubFetch(`${GITHUB_API_BASE}/users/${username}`);
     cacheSet(cacheKey, data);
     res.set('X-Cache', 'MISS');
     res.json(data);
@@ -79,7 +80,7 @@ githubRouter.get('/repos/:username', async (req, res, next) => {
     }
 
     const data = await githubFetch(
-      `${config.githubApiBase}/users/${username}/repos?sort=stars&per_page=100`
+      `${GITHUB_API_BASE}/users/${username}/repos?sort=stars&per_page=100`
     );
     cacheSet(cacheKey, data);
     res.set('X-Cache', 'MISS');
@@ -130,7 +131,7 @@ githubRouter.get('/profile-readme/:username', async (req, res, next) => {
 
     try {
       const data = await githubFetch(
-        `${config.githubApiBase}/repos/${username}/${username}/readme`
+        `${GITHUB_API_BASE}/repos/${username}/${username}/readme`
       );
       
       let decoded = '';
@@ -274,7 +275,7 @@ githubRouter.get('/repos/health/:username', async (req, res, next) => {
     let repos = cacheGet(reposCacheKey);
     if (!repos) {
       repos = await githubFetch(
-        `${config.githubApiBase}/users/${username}/repos?sort=stars&per_page=100`
+        `${GITHUB_API_BASE}/users/${username}/repos?sort=stars&per_page=100`
       );
       cacheSet(reposCacheKey, repos);
     }
@@ -296,7 +297,7 @@ githubRouter.get('/repos/health/:username', async (req, res, next) => {
 
       try {
         const contents = await githubFetch(
-          `${config.githubApiBase}/repos/${username}/${repo.name}/contents`
+          `${GITHUB_API_BASE}/repos/${username}/${repo.name}/contents`
         );
         
         if (Array.isArray(contents)) {
