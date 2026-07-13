@@ -53,6 +53,7 @@ app.use('/api', githubRouter);
 app.use(errorHandler);
 
 // ─── Start ────────────────────────────────────────────────────────────────────
+// Watch reload trigger
 app.listen(config.port, () => {
   console.log(`✅ GitSum server running on http://localhost:${config.port}`);
   console.log(`   GitHub auth: ${config.githubToken ? '🔐 PAT configured' : '⚠️  No token (60 req/hr)'}`);
