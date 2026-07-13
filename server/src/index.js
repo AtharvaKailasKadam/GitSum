@@ -8,27 +8,49 @@ import { cacheStats } from './middleware/cache.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(morgan('dev'));
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow server-to-server or tools (no origin header)
-    if (!origin) return callback(null, true);
+app.use(cors((req, callback) => {
+  const origin = req.header('Origin');
+  let isAllowed = false;
+  
+  // Allow server-to-server or tools (no origin header)
+  if (!origin) {
+    isAllowed = true;
+  } else {
+    // 1. Check if same-origin (origin host matches current request host)
+    let originHost = '';
+    try {
+      originHost = new URL(origin).host;
+    } catch (e) {}
     
-    // Dynamic matching for any local development port
-    if (/^https?:\/\/localhost:\d+$/.test(origin) || /^https?:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
-      return callback(null, true);
+    const host = req.get('host');
+    if (originHost && host && originHost === host) {
+      isAllowed = true;
     }
     
-    const allowedOrigins = (process.env.CLIENT_ORIGIN || '').split(',').map(o => o.trim());
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    // 2. Dynamic matching for any local development port
+    if (!isAllowed && (/^https?:\/\/localhost:\d+$/.test(origin) || /^https?:\/\/127\.0\.0\.1:\d+$/.test(origin))) {
+      isAllowed = true;
     }
     
+    // 3. Check allowed origins from env
+    if (!isAllowed) {
+      const allowedOrigins = (process.env.CLIENT_ORIGIN || '').split(',').map(o => o.trim());
+      if (allowedOrigins.includes(origin)) {
+        isAllowed = true;
+      }
+    }
+  }
+
+  if (isAllowed) {
+    callback(null, { origin: true, optionsSuccessStatus: 200 });
+  } else {
     callback(new Error('Not allowed by CORS'));
-  },
-  optionsSuccessStatus: 200,
+  }
 }));
 
 app.use(express.json());
