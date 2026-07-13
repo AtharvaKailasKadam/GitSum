@@ -145,7 +145,7 @@ export function GithubWrapped({ profile, stats, languages, calendarData, healthS
         <div className="wrapped-glow-bg" />
 
         <div className="wrapped-card-header">
-          <span className="wrapped-logo">GitSum Wrapped</span>
+          <span className="wrapped-logo comic-font">GitSum Wrapped</span>
           <button className="wrapped-close-btn" onClick={onClose} aria-label="Close wrapped slide-show">×</button>
         </div>
 

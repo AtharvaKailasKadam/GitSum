@@ -12,6 +12,7 @@ export function ThemeToggle() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('gitsum-theme', theme);
+    window.dispatchEvent(new CustomEvent('gitsum-theme-change', { detail: theme }));
   }, [theme]);
 
   const toggle = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));

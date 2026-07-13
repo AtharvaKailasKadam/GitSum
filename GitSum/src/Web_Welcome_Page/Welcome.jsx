@@ -38,7 +38,7 @@ export const Welcome = () => {
           {/* Heading */}
           <motion.h1 className="welcome-hero-title" variants={itemVariants}>
             Visualize Your GitHub<br />
-            <span className="welcome-hero-accent">GitSum</span>
+            <span className="welcome-hero-accent comic-font">GitSum</span>
           </motion.h1>
 
           {/* Value prop */}

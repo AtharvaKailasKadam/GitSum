@@ -3,8 +3,8 @@
 /* ── Page overlay ──────────────────────────────────────── */
 .summarizer-overlay {
   position: relative;
-  min-height: 100dvh;
-  background: var(--gradient-page);
+  height: 100dvh;
+  background: transparent;
   overflow-y: auto;
   overflow-x: hidden;
 }

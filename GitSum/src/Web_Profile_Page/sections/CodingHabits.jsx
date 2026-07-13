@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useTheme } from '../../hooks/useTheme.js';
 
 export function CodingHabits({ username }) {
+  const theme = useTheme();
+  const cardTheme = theme === 'light' ? 'github' : 'transparent';
+
   return (
     <motion.section
       className="dashboard-section"
@@ -14,12 +18,11 @@ export function CodingHabits({ username }) {
       <h2 className="section-title"><span aria-hidden="true">⏰</span> Coding Habits</h2>
       <div className="graph-container">
         <img
-          src={`https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=${username}&theme=transparent&utcOffset=0`}
+          src={`https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=${username}&theme=${cardTheme}&utcOffset=0`}
           alt={`${username}'s most productive coding times`}
           className="github-graph-image"
           loading="lazy"
           decoding="async"
-          crossOrigin="anonymous"
           onError={(e) => { e.currentTarget.alt = 'Coding habits data unavailable'; }}
         />
       </div>

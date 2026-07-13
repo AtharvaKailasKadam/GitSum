@@ -107,13 +107,29 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  background: var(--clr-bg-base);
+  background: var(--gradient-page);
+  background-attachment: fixed;
   color: var(--clr-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  overflow-x: hidden;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 #root {
@@ -697,7 +713,8 @@ button {
 }
 
 .github-graph-image {
-  width: 100%;
+  width: 75%;
+  margin: auto;
   display: block;
   border-radius: var(--r-md);
 }
@@ -854,4 +871,20 @@ button {
 :root {
   --safe-height: 100dvh;
   --stable-height: 100vh;
+}
+
+/* ── Super Comic Font ────────────────────────────── */
+.comic-font {
+  font-family: "Comic Sans MS", "Comic Neue", cursive, sans-serif !important;
+}
+
+.gitsum-logo-text {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--clr-accent);
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 2px;
+  letter-spacing: -0.5px;
 }

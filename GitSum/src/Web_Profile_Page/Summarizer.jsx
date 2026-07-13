@@ -159,15 +159,21 @@ export function Summarizer() {
 
             {/* ── Top bar ── */}
             <header className="dashboard-topbar" aria-label="GitSum navigation">
-                <img
-                    src={logo}
-                    alt="GitSum logo"
-                    className="gitsum-logo"
+                <div
+                    className="topbar-logo-link"
                     onClick={() => navigate('/')}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
-                />
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+                >
+                    <img
+                        src={logo}
+                        alt="GitSum logo"
+                        className="gitsum-logo"
+                    />
+                    <span className="gitsum-logo-text comic-font">GitSum</span>
+                </div>
                 <div className="topbar-actions" aria-label="Dashboard actions">
                     <button className="btn-ghost" onClick={() => setShowWrapped(true)} aria-label="Open GitHub Wrapped Year Recap">
                         🎁 Wrapped
@@ -257,7 +263,7 @@ export function Summarizer() {
 
                         <footer className="dashboard-footer">
                             <p>
-                                ✨ <strong>GitSum</strong> — Visualize your GitHub journey at a glance.
+                                ✨ <strong className="comic-font">GitSum</strong> — Visualize your GitHub journey at a glance.
                             </p>
                             <p className="footer-sub">
                                 Data sourced from GitHub API via a secure server-side proxy.

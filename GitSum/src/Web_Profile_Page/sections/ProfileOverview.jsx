@@ -18,7 +18,6 @@ export function ProfileOverview({ profile }) {
           alt={`${profile.login}'s GitHub avatar`}
           className="profile-avatar"
           loading="lazy"
-          crossOrigin="anonymous"
         />
         <div className="profile-info">
           <h1 className="profile-username">@{profile.login}</h1>

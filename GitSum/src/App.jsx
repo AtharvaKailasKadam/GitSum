@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { DashboardSkeleton } from './components/SkeletonLoader.jsx';
 import { PageTransition } from './components/PageTransition.jsx';
+import { TransitionProvider, useTransitionDirection } from './components/TransitionContext.jsx';
 import './App.css';
 
 // Code-split all routes — each page loads only when first visited
@@ -15,8 +16,9 @@ const Compare      = lazy(() => import('./Web_Compare_Page/Compare.jsx').then(m 
 // AnimatePresence must be a child of Router so it can read location
 function AnimatedRoutes() {
   const location = useLocation();
+  const { direction } = useTransitionDirection();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence custom={direction}>
       <Routes location={location} key={location.pathname}>
         <Route
           path="/"
@@ -88,7 +90,9 @@ function AnimatedRoutes() {
 function App() {
   return (
     <Router>
-      <AnimatedRoutes />
+      <TransitionProvider>
+        <AnimatedRoutes />
+      </TransitionProvider>
     </Router>
   );
 }

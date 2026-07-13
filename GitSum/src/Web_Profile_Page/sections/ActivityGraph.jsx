@@ -1,7 +1,13 @@
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useTheme } from '../../hooks/useTheme.js';
 
 export function ActivityGraph({ username }) {
+  const theme = useTheme();
+  const graphTheme = theme === 'light' ? 'react' : 'react-dark';
+  const textClr = theme === 'light' ? '5c5c73' : '8e8ea0';
+  const accentClr = theme === 'light' ? 'ff6200' : 'ff9c42';
+
   return (
     <motion.section
       className="dashboard-section"
@@ -14,12 +20,11 @@ export function ActivityGraph({ username }) {
       <h2 className="section-title"><span aria-hidden="true">📅</span> Commit Activity</h2>
       <div className="graph-container">
         <img
-          src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=react-dark&bg_color=transparent&color=8e8ea0&line=ff9c42&point=ff9c42&area=true&hide_border=true`}
+          src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${graphTheme}&bg_color=transparent&color=${textClr}&line=${accentClr}&point=${accentClr}&area=true&hide_border=true`}
           alt={`${username}'s commit activity graph`}
           className="github-graph-image"
           loading="lazy"
           decoding="async"
-          crossOrigin="anonymous"
           onError={(e) => { e.currentTarget.alt = 'Activity graph unavailable'; }}
         />
       </div>

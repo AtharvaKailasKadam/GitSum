@@ -7,11 +7,8 @@ export default defineConfig({
   build: {
     /* Prevent CSS order issues in production */
     cssCodeSplit: false,
-    /* Ensure consistent minification */
-    minify: 'terser',
-    terserOptions: {
-      compress: { drop_console: false },
-    },
+    /* Ensure consistent minification with esbuild */
+    minify: 'esbuild',
     /* Disable source maps if not needed (reduces size) */
     sourcemap: false,
   },

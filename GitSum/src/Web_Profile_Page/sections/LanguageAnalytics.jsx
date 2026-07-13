@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useTheme } from '../../hooks/useTheme.js';
 
 export function LanguageAnalytics({ username }) {
+  const theme = useTheme();
+  const cardTheme = theme === 'light' ? 'github' : 'transparent';
+
   return (
     <motion.section
       className="dashboard-section"
@@ -15,21 +19,19 @@ export function LanguageAnalytics({ username }) {
       <h2 className="section-title"><span aria-hidden="true">🎨</span> Language Analytics</h2>
       <div className="analytics-grid">
         <img
-          src={`https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=${username}&theme=transparent`}
+          src={`https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=${username}&theme=${cardTheme}`}
           alt={`${username}'s repos per language`}
           className="github-analytics-image"
           loading="lazy"
           decoding="async"
-          crossOrigin="anonymous"
           onError={(e) => { e.currentTarget.alt = 'Language stats unavailable'; }}
         />
         <img
-          src={`https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=${username}&theme=transparent`}
+          src={`https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=${username}&theme=${cardTheme}`}
           alt={`${username}'s most committed languages`}
           className="github-analytics-image"
           loading="lazy"
           decoding="async"
-          crossOrigin="anonymous"
           onError={(e) => { e.currentTarget.alt = 'Commit language stats unavailable'; }}
         />
       </div>

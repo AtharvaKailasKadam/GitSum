@@ -3,7 +3,7 @@
 .Username-Overlay {
   position: fixed;
   inset: 0;
-  background: var(--gradient-page);
+  background: transparent;
   z-index: 1;
   display: flex;
   align-items: center;

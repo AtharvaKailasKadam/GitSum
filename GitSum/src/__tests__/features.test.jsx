@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ContributionCalendar } from '../Web_Profile_Page/sections/ContributionCalendar.jsx';
 import { BadgesShelf } from '../Web_Profile_Page/sections/BadgesShelf.jsx';
 import React from 'react';
 
 beforeAll(() => {
-  global.IntersectionObserver = class {
+  globalThis.IntersectionObserver = class {
     constructor() {}
     observe() {}
     unobserve() {}
